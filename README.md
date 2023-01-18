@@ -1,5 +1,5 @@
-# Backtester
+# Backtesting
 
-Learn in details
-- web-sockets
-- how works request/responce
+## Data
+## Econometrics
+## Charts

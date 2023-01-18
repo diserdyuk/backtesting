@@ -1,0 +1,7 @@
+PyYAML
+yfinance
+pandas
+black
+numpy
+requests
+python-binance

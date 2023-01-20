@@ -3,9 +3,9 @@ import datetime
 from binance.client import Client
 
 
-class DataBinance:
+class GetSpotCryptoData:
 
-    """Class for get historical data from Binance
+    """Class for get historical data(spot) from Binance
 
     Attributes
     ----------
@@ -28,7 +28,10 @@ class DataBinance:
         self.end = end
         self.bclient = Client()
 
-    def get_data_spot_1hour(self):
+    def __repr__(self):
+        return f"GetSpotCryptoData(ticker: {self.ticker}, start: {self.start}, end: {self.end})"
+
+    def get_data_spot_1h(self):
         klines = self.bclient.get_historical_klines(
             self.ticker,
             Client.KLINE_INTERVAL_1HOUR,
@@ -71,5 +74,5 @@ class DataBinance:
 # get historical data
 start_date = datetime.datetime.strptime("1 Jan 2022", "%d %b %Y")
 today_date = datetime.datetime.today()
-btcusdt = DataBinance("BTCUSDT", start_date, today_date)
-print(btcusdt.get_data_spot_1hour())
+btcusdt = GetSpotCryptoData("BTCUSDT", start_date, today_date)
+print(btcusdt.get_data_spot_1h())

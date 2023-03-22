@@ -263,7 +263,7 @@ def three_bars_contra_ss(df):
 def three_bars_contra_v2_ss(df, size):
 
     """
-    1 with SL (below 3rd bar, High-1.0)
+    1 with SL (above 3rd bar, High+1.0)
     2 with TP: 25%, 50%, 75%, 100%, 200%
     3 create SS signal, true/false (the same in V_1)
     4 add column %-nt changed move from 1 to 3 bar
@@ -300,8 +300,9 @@ def three_bars_contra_v2_ss(df, size):
             price_open = row["Close"]
             pcnt_cng = row["Pcnt_cngd"]
             pcnts_25 = row["25pcnt"]
-            stop_loss = row["High"] + abs(pcnts_25)
-            take_profit = price_open - (abs(pcnts_25) * 2)
+            # SL 100%
+            stop_loss = row["High"] + (abs(pcnts_25) * 4)
+            take_profit = price_open - (abs(pcnts_25) * 16)
 
         # stop-loss
         elif (position == True) and (row["High"] >= stop_loss):
@@ -355,7 +356,131 @@ def three_bars_contra_v2_ss(df, size):
     df_result.to_csv("backtest_v2_ss.csv", index=False)
 
 
-three_bars_contra_v2_ss(df, 0.010)
+def three_bars_contra_v2_l(df, size):
+
+    """
+    1 with SL (below 3rd bar, Low-1.0)
+    2 with TP: 25%, 50%, 75%, 100%, 200%
+    3 create Long signal, true/false
+    3.1 add avg volume per 5 prev bars
+    3.2 day of week
+    4 add column %-nt changed move from 1 to 3 bar
+    5 add columns 25pcnt
+    6 size, volume contracts in position
+    7 iterate on dataframe
+    8 save dataframe in csv format
+    """
+
+    # signal L
+    df["Long"] = (
+        (df["Close"] < df["Close"].shift(1))
+        & (df["Close"].shift(1) < df["Close"].shift(2))
+        & (df["Close"].shift(2) < df["Close"].shift(3))
+        & (df["Volume"] > df["Volume"].shift(1))
+        & (df["Volume"].shift(1) > df["Volume"].shift(2))
+        & (df["Volume"].shift(2) > df["Volume"].shift(3))
+    )
+
+    # avg vol from 5 bars
+    df["Avg_vol"] = df["Volume"] / (
+        (
+            df["Volume"].shift(1)
+            + df["Volume"].shift(2)
+            + df["Volume"].shift(3)
+            + df["Volume"].shift(4)
+            + df["Volume"].shift(5)
+        )
+        / 5
+    )
+
+    # %-nt from open 1 bar to close 3 bar
+    df["Pcnt_cngd"] = (df["Open"].shift(2) - df["Close"]) / df["Open"].shift(2)
+
+    # day of week
+    df["Day_week"] = df.index.day_name()
+
+    # part of move (from 1st to 3rd bar)
+    df["25pcnt"] = (df["Close"] - df["Open"].shift(2)) / 4
+
+    result = []
+    position = False
+
+    for index, row in df.iterrows():
+        if (row["Long"] == True) and (position == False):
+            position = True
+            # new_datetime = index + pd.Timedelta(minutes=HOLD_MIN)
+            date_open = index
+            price_open = row["Close"]
+            pcnt_cng = row["Pcnt_cngd"]
+            avg_vol = row["Avg_vol"]
+            day_week = row["Day_week"]
+            pcnts_25 = row["25pcnt"]
+            # SL, Low-1.0
+            stop_loss = row["Low"] - 1.0
+            take_profit = price_open + (abs(pcnts_25) * 1)
+
+        # stop-loss
+        elif (position == True) and (row["Low"] <= stop_loss):
+            # if index == new_datetime:
+            result.append(
+                [
+                    date_open,
+                    index,
+                    price_open,
+                    stop_loss,
+                    stop_loss - price_open,
+                    (stop_loss - price_open) * size,
+                    pcnt_cng,
+                    avg_vol,
+                    day_week,
+                    pcnts_25,
+                ]
+            )
+            position = False
+
+        # take-profit
+        elif (position == True) and (row["High"] > take_profit):
+            # if index == new_datetime:
+            result.append(
+                [
+                    date_open,
+                    index,
+                    price_open,
+                    take_profit,
+                    take_profit - price_open,
+                    (take_profit - price_open) * size,
+                    pcnt_cng,
+                    avg_vol,
+                    day_week,
+                    pcnts_25,
+                ]
+            )
+            position = False
+
+    # list to dataframe
+    df_result = pd.DataFrame(
+        result,
+        columns=[
+            "Date_open",
+            "Date_close",
+            "Price_open",
+            "Price_close",
+            "Points",
+            "Usdt",
+            "Pcnt_cng",
+            "Avg_vol5",
+            "Day_week",
+            "Pcnts_25",
+        ],
+    )
+
+    # save dataframe to csv
+    df_result.to_csv(f"backtest_v2_l.csv", index=False)
+
+
+# three_bars_contra_v2_ss(df, 0.010)
+
+three_bars_contra_v2_l(df, 0.010)
 
 # three_bars_contra_ss(df)
 
@@ -370,7 +495,7 @@ three_bars_contra_v2_ss(df, 0.010)
 # max_avg = 6.0
 # days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
-df_usdt = pd.read_csv(f"backtest_v2_ss.csv")
+df_usdt = pd.read_csv(f"backtest_v2_l.csv")
 
 # %-cngd move 1-3 bars
 # df_usdt = df_usdt[df_usdt["Pcnt_cng"] <= max_cngd]
@@ -414,7 +539,7 @@ df_usdt["Cumsum_usdt"] = df_usdt["Usdt"].cumsum()
 
 # draw chart
 chart = DrawChart(
-    f"BTCUSDT_usdt_v2_ss",
+    f"BTCUSDT_usdt_v2_l",
     df_usdt["Cumsum_usdt"],
     df_usdt,
     "charts",

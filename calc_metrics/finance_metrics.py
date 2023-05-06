@@ -14,3 +14,23 @@ def log_return(data):
 
     data["Log_return"] = np.log(data.Close / data.Close.shift(1))
     return data
+
+
+def profit_factor():
+    pass
+
+
+def win_rate():
+    pass
+
+
+def max_dd():
+    pass
+
+
+def max_loss_in_posit():
+    pass
+
+
+def sharp():
+    pass

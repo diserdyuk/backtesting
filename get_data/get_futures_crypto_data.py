@@ -4,7 +4,7 @@ import pandas as pd
 
 
 def get_futures_crypto_data(
-    ticker, interval="4h", limit=1500, start="2020-01-16 00:00:00"
+    ticker, interval="4h", limit=1500, start="2023-01-01 00:00:00"
 ):
 
     """
@@ -60,15 +60,15 @@ def get_futures_crypto_data(
     return data
 
 
-start_date = "2020-01-01"
-end_year, end_month = "2023", "01"
+start_date = "2023-01-01"
+end_year, end_month = "2023", "05"
 
 df = pd.DataFrame()
 
 while True:
     # 2020 == 2023 and 01 == 01
     if start_date[0:4] == end_year and start_date[5:7] == end_month:
-        df.to_csv(f"BTCUSDT_15m_{start_date}.csv")
+        df.to_csv(f"BTCUSDT_update_15m_{start_date}.csv")
         break
     else:
         btcusdt = get_futures_crypto_data(

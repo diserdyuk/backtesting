@@ -628,18 +628,18 @@ def calculate_risk_pcnt_account(df, pcnt_account, name_setup):
 # three_bars_contra_v2_l(df, 0.010, 16, 4)
 
 # sl, 4==100, 8==200, 16==400, 24==600
-# three_bars_contra_v2_ss(df=df, size=0.01, leverage_tp=1, leverage_sl=16)
+three_bars_contra_v2_ss(df=df, size=0.01, leverage_tp=1, leverage_sl=16)
 
 # three_bars_contra_ss(df)
 
 # three_bars_contra_l(df)
 
 
-df_v2_1_ss = pd.read_csv(f"setup_v2_1_ss.csv")
-calculate_risk_pcnt_account(df_v2_1_ss, 20.0, "v_2_1_ss")
+# df_v2_1_ss = pd.read_csv(f"setup_v2_1_ss.csv")
+# calculate_risk_pcnt_account(df_v2_1_ss, 20.0, "v_2_1_ss")
 
 
-"""
+# """
 # hold_min = 30
 # max_cngd = 0.009
 # min_cngd = 0.003
@@ -684,7 +684,7 @@ df_usdt = df_usdt[df_usdt["Day_hour"].isin([1, 2, 3, 6, 9, 10, 13, 14, 17, 21, 2
 # filter small movement
 df_usdt = df_usdt[df_usdt["Open_low"] >= 50.0]
 
-# df_usdt.to_csv(f"setup_v2_ss.csv", index=False)
+df_usdt.to_csv(f"setup_v2_ss.csv", index=False)
 
 print(df_usdt.head(5))
 print(df_usdt.tail(5))
@@ -719,4 +719,4 @@ print(f"Avg winn-loss: {avg_winnloss}")
 # print("Min avg", df_usdt["Avg_vol5"].min())
 
 print("Trades", df_usdt["Usdt"].count())
-"""
+# """

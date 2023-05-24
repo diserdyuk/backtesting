@@ -34,3 +34,7 @@ def max_loss_in_posit():
 
 def sharp():
     pass
+
+
+def correlation():
+    pass

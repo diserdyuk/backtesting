@@ -25,10 +25,12 @@ class GetStockData:
         get info about stock
     """
 
-    def __init__(self, ticker, start, end):
+    def __init__(self, ticker, start, end, path):
+        print("Ticker", len(ticker))
         self.ticker = ticker
         self.start = start
         self.end = end
+        self.path = path
         # self.get_data()
         # self.get_info()
 
@@ -38,9 +40,19 @@ class GetStockData:
         )
 
     def get_data(self):
-        data = yf.download(self.ticker, self.start, self.end)
-        # self.data = data
-        return data
+        if len(self.ticker) == 1:
+            data = yf.download(self.ticker, self.start, self.end)
+            # drop time
+            data.index = data.index.date
+            data.to_csv(f"{self.path}/{''.join(self.ticker)}.csv")
+            return data
+        elif len(self.ticker) >= 2:
+            for ticker in self.ticker:
+                print(ticker)
+                data = yf.download(ticker, self.start, self.end)
+                data.index = data.index.date
+                data.to_csv(f"{self.path}/{''.join(ticker)}.csv")
+            return None
 
     def get_info(self):
         data = yf.Ticker(self.ticker)

@@ -9,25 +9,35 @@ class DrawChart:
     ----------
     ticker: str
         symbol of instrument
+    data: dataframe
+        DataFrame
+    title: define plot
+        title of plot
+    xlabel and ylabel:
+        name of axis plot
+    save_path:
+        dir for chart
 
     Methods
     -------
-    draw_chart:
+    plot_data:
         drawing one chart (time and price)
     """
 
-    def __init__(self, ticker, data, df, save_path):
+    def __init__(self, ticker, data, title, xlabel, ylabel, save_path):
         self.ticker = ticker
         self.data = data
-        self.df = df
+        self.title = title
         self.save_path = save_path
+        self.xlabel = xlabel
+        self.ylabel = ylabel
 
-    def draw_chart(self):
-        self.data.plot(kind="line", figsize=[14, 8])
-        plt.title(
-            f"{self.ticker}, period: {self.df.iloc[0][0]} - {self.df.iloc[-1][0]}",
-            fontsize=13,
-        )
+    def plot_data(self):
+        """plot stock prices"""
+        plt.rcParams["figure.figsize"] = (12, 8)
+
+        ax = self.data.plot(title=f"{self.title}_{self.ticker}", fontsize=9)
+        ax.set_xlabel(self.xlabel)
+        ax.set_ylabel(self.ylabel)
         plt.tight_layout()
-        plt.savefig(f"{self.save_path}/{self.ticker}.png")
-        # plt.show()
+        plt.savefig(f"{self.save_path}/{self.title}_{self.ticker}.png")

@@ -30,7 +30,7 @@ class ReadWriteData:
             f"{self.path}/{''.join(self.tickers)}.csv",
             index_col="Date",
             parse_dates=True,
-            usecols=["Date", "Close"],
+            usecols=self.columns,
             na_values=["nan"],
         )
         return dataframe

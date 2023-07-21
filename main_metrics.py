@@ -1,18 +1,15 @@
-import pandas as pd
-
-from calc_metrics.finance_metrics import compute_daily_returns
 from read_write_data.read_write import ReadWriteData
 from draw_plot.draw_chart import DrawChart
 from calc_metrics.finance_metrics import FinanceMetrics
 
 
-tickers = ["SPY_BA_normalize"]
+tickers = ["MSFT"]
 path = "datafeed"
-columns = ["Date", "Close_SPY", "Close_BA"]
+columns = ["Date", "Close"]
 
 read_data = ReadWriteData(path, tickers, columns)
 df = read_data.read_data_csv()
-print(df)
+# print(df)
 
 # compute daily returns
 fin_metrics = FinanceMetrics(df)
@@ -21,3 +18,6 @@ print(daily_returns)
 
 plot = DrawChart(tickers, daily_returns, "Daily_returns", "Date", "Price", "charts")
 plot.plot_data()
+
+df_rsi = fin_metrics.rsi(2)
+print(df_rsi.tail(10))

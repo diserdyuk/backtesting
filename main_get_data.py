@@ -25,9 +25,13 @@ ticker_crypto = "BTCUSDT"
 time_frame = "1d"
 limit_rows = 1500
 start_date_crypto = "2019-01-01 00:00:00"
+path = "datafeed"
 
 crypto_fut_data = GetCryptoFutData(
     ticker_crypto, time_frame, limit_rows, start_date_crypto
 )
 df_btcusdt = crypto_fut_data.get_futures_data()
+df_btcusdt.index.name = "Date"
 print(df_btcusdt)
+
+df_btcusdt.to_csv(f"{path}/{ticker_crypto}.csv")

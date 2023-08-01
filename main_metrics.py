@@ -3,8 +3,8 @@ from draw_plot.draw_chart import DrawChart
 from calc_metrics.finance_metrics import FinanceMetrics
 
 
-tickers = ["MSFT"]
 path = "datafeed"
+tickers = ["MSFT"]
 columns = ["Date", "Close"]
 
 read_data = ReadWriteData(path, tickers, columns)
@@ -13,7 +13,7 @@ print(df)
 
 # compute daily returns
 fin_metrics = FinanceMetrics(df)
-daily_returns = fin_metrics.compute_daily_returns()
+daily_returns = fin_metrics.daily_returns()
 print(daily_returns)
 
 plot = DrawChart(tickers, daily_returns, "Daily_returns", "Date", "Price", "charts")

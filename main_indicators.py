@@ -12,5 +12,5 @@ print(df)
 
 # compute RSI
 calc_indicators = Indicators(df)
-df_rsi = calc_indicators.rsi(2)
+df_rsi = calc_indicators.rsi(2, "Close")
 print(df_rsi.tail(10))

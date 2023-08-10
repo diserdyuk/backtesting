@@ -20,15 +20,6 @@ print(stock.ticker)
 """
 
 tickers_crypto = [
-    "BTCUSDT",
-    "ETHUSDT",
-    "XRPUSDT",
-    "1000SHIBUSDT",
-    "CRVUSDT",
-    "SOLUSDT",
-    "DOGEUSDT",
-    "LTCUSDT",
-    "OPUSDT",
     "STMXUSDT",
     "COMPUSDT",
     "MKRUSDT",
@@ -39,6 +30,19 @@ tickers_crypto = [
     "BNBUSDT",
     "ARBUSDT",
     "MATICUSDT",
+]
+
+"""
+[   "BTCUSDT",
+    "ETHUSDT",
+    "XRPUSDT",
+    "1000SHIBUSDT",
+    "CRVUSDT",
+    "SOLUSDT",
+    "DOGEUSDT",
+    "LTCUSDT",
+    "OPUSDT",
+    
     "KNCUSDT",
     "XLMUSDT",
     "FXSUSDT",
@@ -200,6 +204,7 @@ tickers_crypto = [
     "RLCUSDT",
     "UMAUSDT",
 ]
+"""
 
 print(len(tickers_crypto))
 

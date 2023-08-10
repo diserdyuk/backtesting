@@ -35,7 +35,9 @@ class FinanceMetrics:
 
     def daily_returns(self):
 
-        """Compute and return the daily return values"""
+        """Compute and return the daily return values
+        column 'Close'
+        """
 
         dr_dataframe = (self.dataframe / self.dataframe.shift(1)) - 1
         dr_dataframe.iloc[0] = 0
@@ -43,7 +45,9 @@ class FinanceMetrics:
 
     def log_return(self):
 
-        """Calculate log return (np.log) on base Close price"""
+        """Calculate log return (np.log) on base Close price
+        column 'Close'
+        """
 
         self.dataframe["Log_return"] = np.log(
             self.dataframe.Close / self.dataframe.Close.shift(1)
@@ -52,7 +56,9 @@ class FinanceMetrics:
 
     def win_rate(self):
 
-        """Calculate win rate of trades"""
+        """Calculate win rate of trades
+        column 'Trades'
+        """
 
         total_trades = self.dataframe.count()
         # print("total_trades: ", total_trades)
@@ -65,7 +71,9 @@ class FinanceMetrics:
 
     def profit_factor(self):
 
-        """Calculate profit factor of trades"""
+        """Calculate profit factor of trades
+        column 'Trades'
+        """
 
         gross_profit = (self.dataframe[self.dataframe > 0]).sum()
         # print("gross profit: ", gross_profit)

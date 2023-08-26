@@ -8,12 +8,12 @@ from calc_metrics.finance_metrics import FinanceMetrics
 
 path_read_data = "datafeed/crypto"
 path_save_data = "false_breaks"
-ticker = "LTCUSDT"
+ticker = "BTCUSDT"
 columns = ["Date", "Open", "High", "Low", "Close", "Volume"]
 # indicators
 mov_avg_period = 7
 rsi_period = 2
-rsi_value = 7
+rsi_value = 15
 
 data = ReadWriteData(path_read_data, ticker, columns)
 df = data.read_data_csv()
@@ -91,7 +91,7 @@ for index, row in df.iterrows():
         and (row["Close"] > min_price)
         and (row["Close"] < row["Open"])
         # and (row["RSI"] < rsi_value)
-        and (row["Open"] > row["MA"])
+        and (row["Open"] < row["MA"])
     ):
         # open long position
         position = True

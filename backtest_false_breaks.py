@@ -29,12 +29,12 @@ df["Maximum"] = (df["High"] < df["High"].shift(1)) & (
     df["High"].shift(1) > df["High"].shift(2)
 )
 df["Max_price"] = df["High"].shift(1)
-print(df.tail(10))
+# print(df.tail(10))
 
 calc_indicators = Indicators(df)
 df = calc_indicators.moving_average(mov_avg_period, "Close")
 # df = calc_indicators.rsi(rsi_period, "Close")
-print(df)
+# print(df)
 
 # iterate by df
 risk_position_usdt = 10.0
@@ -117,7 +117,8 @@ df_result = pd.DataFrame(
 # save dataframe to csv
 df_result["Equity_usdt"] = df_result["Result_trade"].cumsum()
 df_result.to_csv(f"{path_save_data}/backtest_false_breakrs_{ticker}.csv", index=False)
-print(df_result)
+print(ticker)
+print(df_result.tail(5))
 
 df_result_plot = df_result["Equity_usdt"]
 plot = DrawChart(ticker, df_result_plot, ticker, "Date", "Price", "false_breaks")
@@ -127,5 +128,8 @@ plot.plot_data()
 fin_metrics = FinanceMetrics(df_result["Result_trade"])
 pf = fin_metrics.profit_factor()
 win_rate = fin_metrics.win_rate()
+max_dd = fin_metrics.max_dd(df_result["Equity_usdt"])
+
 print("PF:", round(pf, 2))
 print("WinRate:", round(win_rate, 2))
+print("Max_DD:", max_dd)

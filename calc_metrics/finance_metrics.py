@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 
 class FinanceMetrics:
@@ -109,8 +110,26 @@ class FinanceMetrics:
 
         return (avg_win, avg_loss)
 
-    def max_dd():
-        pass
+    def max_dd(self, data):
+
+        """Calculate maximum drawdown of equity"""
+
+        df = pd.DataFrame(data)
+
+        df["Result"] = abs(data)
+
+        # Calculate the cumulative maximum (rolling maximum) of prices
+        df["CumulativeMax"] = df["Result"].cummax()
+
+        # Calculate the drawdown in percentage
+        df["Drawdown"] = (
+            (df["CumulativeMax"] - df["Result"]) / df["CumulativeMax"] * 100
+        )
+
+        # Find the maximum drawdown value and its corresponding date
+        max_dd_pcnt = df["Drawdown"].max()
+
+        return round(max_dd_pcnt, 0)
 
     def max_loss_in_posit():
         pass

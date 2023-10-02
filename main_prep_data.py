@@ -3,10 +3,10 @@ import pandas as pd
 from get_data.get_stock_data import GetPrepareData
 
 
-tickers = ["BA"]
+tickers = ["AAPL"]
 start_date = "2022-01-01"
 end_date = "2023-07-01"
-path = "datafeed"
+path = "/home/denis/backtester_files/"
 
 # create list of datetime objects
 dates = pd.date_range(start_date, end_date)

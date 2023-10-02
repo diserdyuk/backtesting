@@ -1,4 +1,5 @@
 import pandas as pd
+import csv
 
 
 class ReadWriteData:
@@ -25,6 +26,7 @@ class ReadWriteData:
         self.tickers = tickers
         self.columns = columns
 
+    """
     def read_data_csv(self):
         dataframe = pd.read_csv(
             f"{self.path}/{''.join(self.tickers)}.csv",
@@ -34,3 +36,17 @@ class ReadWriteData:
             na_values=["nan"],
         )
         return dataframe
+    """
+
+    def read_data_csv(self):
+        # Open the CSV file in the root directory
+        with open(self.path + self.tickers + ".csv", "r") as csv_file:
+            # Create a CSV reader
+            csv_reader = csv.reader(csv_file)
+            # return csv_reader
+
+            df = pd.DataFrame(csv_reader)
+            df.columns = df.iloc[0]
+            df = df[1:]
+            df.set_index("Date", inplace=True)
+            return df

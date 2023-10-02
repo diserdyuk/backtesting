@@ -28,7 +28,6 @@ class GetStockData:
     """
 
     def __init__(self, ticker, start, end, path):
-        print("Ticker", len(ticker))
         self.ticker = ticker
         self.start = start
         self.end = end
@@ -42,21 +41,13 @@ class GetStockData:
         )
 
     def get_data(self):
-        if len(self.ticker) == 1:
-            data = yf.download(self.ticker, self.start, self.end)
+        for ticker in self.ticker:
+            data = yf.download(ticker, self.start, self.end)
             data.index = data.index.date
             data.index = data.index.set_names("Date")
             data.rename(columns={"Adj Close": "Adj_Close"}, inplace=True)
-            data.to_csv(f"{self.path}/{''.join(self.ticker)}.csv")
-            return data
-        elif len(self.ticker) >= 2:
-            for ticker in self.ticker:
-                data = yf.download(ticker, self.start, self.end)
-                data.index = data.index.date
-                data.index = data.index.set_names("Date")
-                data.rename(columns={"Adj Close": "Adj_Close"}, inplace=True)
-                data.to_csv(f"{self.path}/{''.join(ticker)}.csv")
-            return None
+            data.to_csv(f"{self.path}/{''.join(ticker)}.csv")
+        return None
 
     def get_info(self):
         data = yf.Ticker(self.ticker)
@@ -103,7 +94,7 @@ class GetPrepareData:
 
         for ticker in self.tickers:
             df = pd.read_csv(
-                f"{self.path}/{ticker}.csv",
+                f"{self.path}{ticker}.csv",
                 index_col="Date",
                 parse_dates=True,
                 # usecols=["Date", "Close"],

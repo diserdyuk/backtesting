@@ -11,7 +11,7 @@ path_save_data = "false_breaks"
 ticker = "BTCUSDT"
 columns = ["Date", "Open", "High", "Low", "Close", "Volume"]
 # indicators
-mov_avg_period = 7
+mov_avg_period = 5
 rsi_period = 2
 rsi_value = 15
 
@@ -31,10 +31,13 @@ df["Maximum"] = (df["High"] < df["High"].shift(1)) & (
 df["Max_price"] = df["High"].shift(1)
 # print(df.tail(10))
 
+df["Close_ab_high"] = df["Close"] > df["High"].shift(1)
+print(df.tail(40))
+
+
 calc_indicators = Indicators(df)
 df = calc_indicators.moving_average(mov_avg_period, "Close")
 # df = calc_indicators.rsi(rsi_period, "Close")
-# print(df)
 
 # iterate by df
 risk_position_usdt = 10.0
@@ -66,6 +69,11 @@ for index, row in df.iterrows():
                     risk_position_usdt * -1.0,
                 ]
             )
+            if (row["Minimum"] is True) and (position is False):
+                min_price = row["Min_price"]
+            else:
+                min_price = 0.0
+
         elif row["Close"] > open_price:
             result_points_tp = result_tp
             position = False
@@ -81,17 +89,23 @@ for index, row in df.iterrows():
                     abs((result_tp / result_sl)) * risk_position_usdt,
                 ]
             )
+            if (row["Minimum"] is True) and (position is False):
+                min_price = row["Min_price"]
+            else:
+                min_price = 0.0
 
     # signal to buy
     if (row["Minimum"] is True) and (position is False):
         min_price = row["Min_price"]
+        print(index, row["Minimum"], row["Min_price"])
     if (
         (position is False)
         and (row["Low"] < min_price)
-        and (row["Close"] > min_price)
-        and (row["Close"] < row["Open"])
+        and (row["Close"] < min_price)
+        # and (row["Open"] < min_price)
+        # and (row["Close"] > row["Open"])
         # and (row["RSI"] < rsi_value)
-        and (row["Open"] < row["MA"])
+        # and (row["Open"] > row["MA"])
     ):
         # open long position
         position = True
@@ -118,7 +132,7 @@ df_result = pd.DataFrame(
 df_result["Equity_usdt"] = df_result["Result_trade"].cumsum()
 df_result.to_csv(f"{path_save_data}/backtest_false_breakrs_{ticker}.csv", index=False)
 print(ticker)
-print(df_result.tail(5))
+print(df_result.tail(20))
 
 df_result_plot = df_result["Equity_usdt"]
 plot = DrawChart(ticker, df_result_plot, ticker, "Date", "Price", "false_breaks")

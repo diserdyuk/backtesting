@@ -36,8 +36,8 @@ class DrawChart:
         """plot stock prices"""
         plt.rcParams["figure.figsize"] = (12, 8)
 
-        ax = self.data.plot(title=f"{self.title}_{self.ticker}", fontsize=9)
+        ax = self.data.plot(title=f"{self.title}_{''.join(self.ticker)}", fontsize=9)
         ax.set_xlabel(self.xlabel)
         ax.set_ylabel(self.ylabel)
         plt.tight_layout()
-        plt.savefig(f"{self.save_path}/{self.ticker}.png")
+        plt.savefig(f"{self.save_path}/{''.join(self.ticker)}.png")

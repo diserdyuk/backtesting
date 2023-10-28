@@ -15,9 +15,9 @@ dates = pd.date_range(start_date, end_date)
 stocks = GetPrepareData(tickers, dates, path)
 
 multipl_df = stocks.get_data()
-print(multipl_df)
+print(multipl_df.head())
 
 
 # normalize stock prices
 normalize_df = stocks.normalize_data(multipl_df)
-print(normalize_df)
+print(normalize_df.head())

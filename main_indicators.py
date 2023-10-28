@@ -3,12 +3,12 @@ from indicators.calculate_indicator import Indicators
 
 
 tickers = ["MSFT"]
-path = "datafeed"
+path = "/home/denis/backtester_files/"
 columns = ["Date", "Close"]
 
 read_data = ReadWriteData(path, tickers, columns)
 df = read_data.read_data_csv()
-print(df)
+print(df.tail(10))
 
 # compute RSI
 calc_indicators = Indicators(df)

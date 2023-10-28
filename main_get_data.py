@@ -4,7 +4,7 @@ from get_data.get_stock_data import GetStockData
 
 
 # stock
-tickers = ["V", "HP"]
+tickers = ["MA"]
 start_date = "2022-01-01"
 end_date = "2023-07-01"
 # save files on local disk
